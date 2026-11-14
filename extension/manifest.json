@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "ChronoTrack",
+  "version": "1.0.1",
+  "description": "Smart browser activity tracking and management with secure Google authentication.",
+
+  "permissions": [
+    "tabs",
+    "history",
+    "webNavigation",
+    "identity",
+    "storage"
+  ],
+
+  "host_permissions": [
+    "http://localhost:5000/*",
+    "http://127.0.0.1:5000/*",
+    "https://www.googleapis.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "oauth2": {
+    "client_id": "871395798275-fu4i3v3q115m6bogd45irvhpnc38vegj.apps.googleusercontent.com",
+    "scopes": [
+      "openid",
+      "email",
+      "profile"
+    ]
+  },
+
+  "incognito": "split",
+
+  "action": {
+    "default_title": "ChronoTrack",
+    "default_popup": "login.html"
+  }
+}

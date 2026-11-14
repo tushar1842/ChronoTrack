@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ChronoTrack - Browsing History</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #090e1a;
+            color: #e5e7eb;
+            font-family: Inter, sans-serif;
+            padding: 35px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        h1 {
+            font-size: 27px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: #172b49;
+            border: 1px solid #334b70;
+            color: #38bdf8;
+            padding: 11px 16px;
+            border-radius: 8px;
+        }
+
+        .summary {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .summary-card {
+            background: #111c30;
+            border: 1px solid #26344c;
+            padding: 20px;
+            border-radius: 12px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .summary-card p {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .summary-card h2 {
+            font-size: 27px;
+            margin-top: 10px;
+        }
+
+        .panel {
+            background: #111c30;
+            border: 1px solid #26344c;
+            border-radius: 13px;
+            padding: 24px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        input, select {
+            width: 100%;
+            background: #0a1425;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #38bdf8;
+        }
+
+        .results-info {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 17px 0;
+            border-bottom: 1px solid #253247;
+        }
+
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            background: #1e3453;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .info {
+            min-width: 0;
+        }
+
+        .info h4 {
+            font-size: 13px;
+            margin-bottom: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .info p {
+            color: #94a3b8;
+            font-size: 11px;
+            overflow-wrap: anywhere;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-top: 7px;
+            font-size: 10px;
+        }
+
+        .normal {
+            background: #123b45;
+            color: #67e8f9;
+        }
+
+        .incognito {
+            background: #3b1d4f;
+            color: #d8b4fe;
+        }
+
+        .time {
+            color: #94a3b8;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 10px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media(max-width: 800px) {
+            body {
+                padding: 20px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width: 550px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .history-item {
+                align-items: flex-start;
+            }
+
+            .time {
+                font-size: 9px;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="topbar">
+        <div>
+            <h1>◷ Browsing History</h1>
+            <p class="subtitle">
+                Search, filter and analyze your browsing activity.
+            </p>
+        </div>
+
+        <button class="back-btn" id="backBtn">
+            ← Dashboard
+        </button>
+    </header>
+
+    <section class="summary">
+
+        <div class="summary-card">
+            <p>Total Records</p>
+            <h2 id="totalRecords">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Normal Visits</p>
+            <h2 id="normalRecords">0</h2>
+        </div>
+
+        <div class="summary-card">
+            <p>Incognito Visits</p>
+            <h2 id="incognitoRecords">0</h2>
+        </div>
+
+    </section>
+
+    <section class="panel">
+
+        <div class="filters">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search title, domain or URL..."
+            >
+
+            <select id="modeFilter">
+                <option value="all">All Modes</option>
+                <option value="normal">Normal</option>
+                <option value="incognito">Incognito</option>
+            </select>
+
+            <input type="date" id="dateFrom">
+
+            <input type="date" id="dateTo">
+
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+
+            <p class="results-info" id="resultsInfo">
+                Loading records...
+            </p>
+
+            <select id="sortFilter" style="width:auto;">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+            </select>
+
+        </div>
+
+        <div id="historyList">
+            <div class="empty">Loading history...</div>
+        </div>
+
+    </section>
+
+</div>
+
+<script src="history.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoTrack Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #090e1a;
+            color: #e5e7eb;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #0e1628;
+            border-right: 1px solid #1e293b;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 45px;
+            padding-left: 10px;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 20px 10px 12px;
+        }
+
+        .menu-item {
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            border-radius: 9px;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: #172b49;
+            color: #38bdf8;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #334155;
+            border-radius: 9px;
+            background: transparent;
+            color: #f87171;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout:hover {
+            background: #351c2a;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            padding: 35px 40px;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 15px;
+        }
+
+        .welcome h1 {
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .welcome p {
+            color: #94a3b8;
+            margin-top: 9px;
+            font-size: 13px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .refresh-btn {
+            background: #172b49;
+            border: 1px solid #334b70;
+            color: #38bdf8;
+            padding: 11px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: #203c61;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user img {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            border: 2px solid #38bdf8;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 13px;
+        }
+
+        .user-info p {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(120deg, #123b65, #29235d);
+            border: 1px solid #334b83;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .hero h2 {
+            font-size: 23px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 8px 13px;
+            background: #164e63;
+            color: #67e8f9;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        /* SECTION */
+
+        .section-heading {
+            font-size: 17px;
+            margin-bottom: 18px;
+        }
+
+        /* STAT CARDS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #111c30;
+            border: 1px solid #26344c;
+            padding: 23px;
+            border-radius: 13px;
+            transition: .2s;
+            min-width: 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card p {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .stat-card h2 {
+            font-size: 29px;
+            margin-top: 9px;
+            color: white;
+        }
+
+        .stat-card small {
+            color: #38bdf8;
+            font-size: 11px;
+            display: inline-block;
+            margin-top: 7px;
+        }
+
+        .normal-card {
+            border-left: 3px solid #22d3ee;
+        }
+
+        .incognito-card {
+            border-left: 3px solid #c084fc;
+        }
+
+        .status-card {
+            border-left: 3px solid #22c55e;
+        }
+
+        /* CONTENT GRID */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.7fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #111c30;
+            border: 1px solid #26344c;
+            border-radius: 13px;
+            padding: 23px;
+            min-width: 0;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .panel-header h3 {
+            font-size: 15px;
+        }
+
+        .search {
+            background: #0a1425;
+            border: 1px solid #334155;
+            border-radius: 7px;
+            padding: 10px 12px;
+            color: white;
+            width: 170px;
+            outline: none;
+        }
+
+        .search:focus,
+        .filter:focus {
+            border-color: #38bdf8;
+        }
+
+        .filter {
+            background: #0a1425;
+            border: 1px solid #334155;
+            border-radius: 7px;
+            padding: 10px;
+            color: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* HISTORY */
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #253247;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .site-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #1e3453;
+            display: grid;
+            place-items: center;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .site-info {
+            min-width: 0;
+        }
+
+        .site-info h4 {
+            font-size: 12px;
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .site-info p {
+            font-size: 10px;
+            color: #94a3b8;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .visit-time {
+            color: #64748b;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+        }
+
+        .normal-badge {
+            background: #123b45;
+            color: #67e8f9;
+        }
+
+        .incognito-badge {
+            background: #3b1d4f;
+            color: #d8b4fe;
+        }
+
+        /* POPULAR SITES */
+
+        .popular-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #253247;
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .popular-item:last-child {
+            border-bottom: none;
+        }
+
+        .popular-item span:first-child {
+            overflow-wrap: anywhere;
+        }
+
+        .popular-item span:last-child {
+            color: #38bdf8;
+            white-space: nowrap;
+        }
+
+        /* STATUS */
+
+        .connection {
+            margin-top: 22px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #0a1425;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .connection-dot {
+            color: #22c55e;
+            margin-right: 7px;
+        }
+
+        .empty {
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        footer {
+            margin-top: 35px;
+            color: #475569;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 650px) {
+            .sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .logo {
+                font-size: 15px;
+                padding: 0;
+            }
+
+            .menu-item {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .logout {
+                font-size: 0;
+            }
+
+            .main {
+                padding: 22px 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+
+            .top-actions {
+                gap: 8px;
+            }
+
+            .welcome h1 {
+                font-size: 21px;
+            }
+
+            .hero {
+                padding: 22px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="logo">⏱ Chrono<span>Track</span></div>
+
+        <p class="menu-title">MENU</p>
+
+       <p class="menu-title">MENU</p>
+
+<div class="menu-item active" data-page="dashboard">
+    ▦ &nbsp; Dashboard
+</div>
+
+<div class="menu-item" data-page="history">
+    ◷ &nbsp; Browsing History
+</div>
+
+<div class="menu-item" data-page="analytics">
+    ◉ &nbsp; Website Analytics
+</div>
+
+<div class="menu-item" data-page="settings">
+    ⚙ &nbsp; Settings
+</div>
+
+        <div class="sidebar-bottom">
+            <button class="logout" id="logout">↪ &nbsp; Logout</button>
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="welcome">
+                <h1>Dashboard</h1>
+                <p>Monitor and understand your browsing activity.</p>
+            </div>
+
+            <div class="top-actions">
+
+                <button class="refresh-btn" id="refreshBtn">
+                    ↻ Refresh
+                </button>
+
+                <div class="user">
+                    <img id="userImage" src="" alt="Profile">
+
+                    <div class="user-info">
+                        <h4 id="userName">Loading...</h4>
+                        <p id="userEmail">Loading...</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+        <section class="hero">
+
+            <h2>Welcome back, <span id="welcomeName">User</span>!</h2>
+
+            <p>
+                Your browsing activity is organized in one place.
+                Explore website visits, monitor normal and incognito
+                browsing, and understand your digital activity.
+            </p>
+
+            <span class="hero-badge">
+                ● ChronoTrack Dashboard
+            </span>
+
+        </section>
+
+        <h3 class="section-heading">Overview · Last 24 Hours</h3>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">🌐</div>
+                <p>Unique Websites</p>
+                <h2 id="totalSites">0</h2>
+                <small>Different domains visited</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <p>Total Page Visits</p>
+                <h2 id="todayVisits">0</h2>
+                <small>Recorded browsing entries</small>
+            </div>
+
+            <div class="stat-card status-card">
+                <div class="stat-icon">🛡️</div>
+                <p>Backend Connection</p>
+                <h2 id="extensionStatus" style="font-size:22px;">Checking</h2>
+                <small id="connectionText">Checking connection...</small>
+            </div>
+
+            <div class="stat-card normal-card">
+                <div class="stat-icon">🌍</div>
+                <p>Normal Browsing</p>
+                <h2 id="normalVisits">0</h2>
+                <small>Regular browsing visits</small>
+            </div>
+
+            <div class="stat-card incognito-card">
+                <div class="stat-icon">🕵️</div>
+                <p>Incognito Browsing</p>
+                <h2 id="incognitoVisits">0</h2>
+                <small>Incognito browsing visits</small>
+            </div>
+
+        </section>
+
+        <section class="content-grid">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>Recent Browsing Activity</h3>
+
+                    <input
+                        type="text"
+                        class="search"
+                        id="searchHistory"
+                        placeholder="Search websites..."
+                    >
+
+                    <select class="filter" id="modeFilter">
+                        <option value="all">All Modes</option>
+                        <option value="normal">Normal</option>
+                        <option value="incognito">Incognito</option>
+                    </select>
+
+                </div>
+
+                <div id="historyList">
+                    <div class="empty">Loading browsing activity...</div>
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h3>Most Visited Websites</h3>
+                </div>
+
+                <div id="popularSites">
+                    <div class="empty">Loading...</div>
+                </div>
+
+                <div class="connection">
+                    <span class="connection-dot">●</span>
+                    <span id="lastUpdated">Waiting for data...</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer>
+            ChronoTrack © 2026 | Personal Browsing Analytics
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>
