@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ChronoTrack - Settings</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #090e1a;
+            color: #e5e7eb;
+            font-family: Inter, sans-serif;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #0e1628;
+            border-right: 1px solid #1e293b;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 45px;
+            padding-left: 10px;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            margin: 20px 10px 12px;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            border-radius: 9px;
+            color: #94a3b8;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: #172b49;
+            color: #38bdf8;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #334155;
+            border-radius: 9px;
+            background: transparent;
+            color: #f87171;
+            cursor: pointer;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            min-width: 0;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 27px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 9px;
+        }
+
+        /* PROFILE */
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 22px;
+            background: #111c30;
+            border: 1px solid #26344c;
+            border-radius: 13px;
+            margin-bottom: 25px;
+        }
+
+        .profile img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #38bdf8;
+        }
+
+        .profile h3 {
+            font-size: 15px;
+        }
+
+        .profile p {
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        /* SETTINGS SECTION */
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-heading {
+            font-size: 15px;
+            margin-bottom: 13px;
+            color: #38bdf8;
+        }
+
+        .settings-card {
+            background: #111c30;
+            border: 1px solid #26344c;
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 21px;
+            border-bottom: 1px solid #253247;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-info h4 {
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .setting-info p {
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* TOGGLE */
+
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #334155;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 4px;
+            top: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        .switch input:checked + .slider {
+            background: #0284c7;
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(22px);
+        }
+
+        /* BUTTONS */
+
+        .action-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #334b70;
+            background: #172b49;
+            color: #38bdf8;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .danger-btn {
+            background: #351c2a;
+            color: #f87171;
+            border-color: #713047;
+        }
+
+        .action-btn:hover {
+            opacity: .8;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #123b45;
+            border: 1px solid #22d3ee;
+            color: #67e8f9;
+            padding: 13px 20px;
+            border-radius: 9px;
+            font-size: 12px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: .3s;
+            pointer-events: none;
+        }
+
+        .status.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .privacy-note {
+            padding: 18px;
+            background: #0a1425;
+            border: 1px solid #26344c;
+            border-radius: 10px;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        @media(max-width: 650px) {
+
+            .sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .logo {
+                font-size: 14px;
+                padding: 0;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .menu-item {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .logout {
+                font-size: 0;
+            }
+
+            .main {
+                padding: 22px 15px;
+            }
+
+            .header h1 {
+                font-size: 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            ⏱ Chrono<span>Track</span>
+        </div>
+
+        <p class="menu-title">MENU</p>
+
+        <div class="menu-item" data-page="dashboard">
+            ▦ &nbsp; Dashboard
+        </div>
+
+        <div class="menu-item" data-page="history">
+            ◷ &nbsp; Browsing History
+        </div>
+
+        <div class="menu-item" data-page="analytics">
+            ◉ &nbsp; Website Analytics
+        </div>
+
+        <div class="menu-item active" data-page="settings">
+            ⚙ &nbsp; Settings
+        </div>
+
+        <div class="sidebar-bottom">
+            <button class="logout" id="logout">
+                ↪ &nbsp; Logout
+            </button>
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="header">
+
+            <h1>Settings</h1>
+
+            <p>
+                Manage your ChronoTrack preferences,
+                privacy and tracking controls.
+            </p>
+
+        </header>
+
+        <!-- PROFILE -->
+
+        <div class="profile">
+
+            <img id="userImage" src="" alt="Profile">
+
+            <div>
+                <h3 id="userName">Loading...</h3>
+                <p id="userEmail">Loading...</p>
+            </div>
+
+        </div>
+
+        <!-- GENERAL -->
+
+        <section class="section">
+
+            <h3 class="section-heading">
+                General Settings
+            </h3>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h4>Master Tracking</h4>
+
+                        <p>
+                            Enable or disable all website visit tracking.
+                        </p>
+
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" id="trackingEnabled">
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h4>Incognito Tracking</h4>
+
+                        <p>
+                            Allow ChronoTrack to record visits made
+                            in Incognito mode.
+                        </p>
+
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" id="incognitoTracking">
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- NOTIFICATIONS -->
+
+        <section class="section">
+
+            <h3 class="section-heading">
+                Notifications
+            </h3>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h4>Visit Notifications</h4>
+
+                        <p>
+                            Show a notification when ChronoTrack
+                            records a website visit.
+                        </p>
+
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" id="notifications">
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PREFERENCES -->
+
+        <section class="section">
+
+            <h3 class="section-heading">
+                Dashboard Preferences
+            </h3>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h4>Auto Refresh</h4>
+
+                        <p>
+                            Save your preference for automatic
+                            dashboard data refresh.
+                        </p>
+
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" id="autoRefresh">
+                        <span class="slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PRIVACY -->
+
+        <section class="section">
+
+            <h3 class="section-heading">
+                Privacy & Security
+            </h3>
+
+            <div class="privacy-note">
+
+                <strong>ChronoTrack Privacy Information</strong>
+
+                <br><br>
+
+                • Website visit records are stored in your configured
+                MongoDB backend.
+
+                <br>
+
+                • Disabling Master Tracking prevents new visits
+                from being submitted.
+
+                <br>
+
+                • Disabling Incognito Tracking prevents new
+                Incognito visits from being recorded.
+
+                <br>
+
+                • Settings are stored locally using Chrome Storage.
+
+                <br><br>
+
+                Note: Existing history records are not automatically
+                deleted when tracking is disabled.
+
+            </div>
+
+        </section>
+
+        <!-- RESET -->
+
+        <section class="section">
+
+            <h3 class="section-heading">
+                Data & Preferences
+            </h3>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div class="setting-info">
+
+                        <h4>Reset Settings</h4>
+
+                        <p>
+                            Restore all ChronoTrack settings
+                            to their default values.
+                        </p>
+
+                    </div>
+
+                    <button class="action-btn danger-btn" id="resetSettings">
+                        Reset Defaults
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <p style="color:#475569;font-size:11px;margin-top:30px;">
+            ChronoTrack © 2026 | Settings Panel
+        </p>
+
+    </main>
+
+</div>
+
+<div class="status" id="statusMessage">
+    Settings saved successfully.
+</div>
+
+<script src="settings.js"></script>
+
+</body>
+
+</html>

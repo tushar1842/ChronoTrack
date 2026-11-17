@@ -3,3 +3,27 @@ node_modules/
 .env
 .env.*
 *.log
+
+# Java build artifacts
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Java IDE files
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Local storage & tmp
+*.tmp
+chronotrack_storage.json
+
+# Office temporary files
+~$*

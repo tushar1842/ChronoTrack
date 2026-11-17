@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoTrack — Project Presentation</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card-dark: #1e293b;
+            --bg-light: #f8fafc;
+            --bg-card: #ffffff;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --cyan: #06b6d4;
+            --emerald: #10b981;
+            --purple: #7c3aed;
+            --amber: #f59e0b;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #f8fafc;
+            --text-light-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Top control bar */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-light);
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .badge-live {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        button {
+            background: var(--bg-card-dark);
+            color: var(--text-light);
+            border: 1px solid var(--border-dark);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .slide-counter {
+            font-size: 13px;
+            color: var(--text-light-muted);
+            font-weight: 600;
+        }
+
+        /* Presentation Container */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+        }
+
+        .slide-stage {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background: var(--bg-light);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 44px 56px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.dark-theme {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        .category-pill {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .dark-theme .category-pill {
+            color: var(--cyan);
+        }
+
+        h1.slide-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 24px;
+        }
+
+        .dark-theme h1.slide-title {
+            color: var(--text-light);
+        }
+
+        /* Card Grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-dark {
+            background: var(--bg-card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-light);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        ul.points {
+            list-style: none;
+        }
+
+        ul.points li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .card-dark ul.points li {
+            color: var(--text-light-muted);
+        }
+
+        ul.points li::before {
+            content: "•";
+            color: var(--primary);
+            font-size: 20px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .card-dark ul.points li::before {
+            color: var(--cyan);
+        }
+
+        /* Speaker notes */
+        .speaker-notes-drawer {
+            background: #090d16;
+            border-top: 1px solid var(--border-dark);
+            padding: 12px 24px;
+            color: var(--text-light-muted);
+            font-size: 13px;
+            max-height: 90px;
+            overflow-y: auto;
+        }
+
+        .speaker-notes-drawer strong {
+            color: var(--amber);
+        }
+
+        /* Code snippets */
+        pre.code-block {
+            background: #090d16;
+            color: #38bdf8;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+
+        /* Badge tags */
+        .pill-normal {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .pill-incog {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 1px solid #ddd6fe;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">
+        <span>⏱️ ChronoTrack</span>
+        <span class="badge-live">Presentation Deck</span>
+    </div>
+    <div class="header-controls">
+        <button id="prevBtn" onclick="prevSlide()">◀ Previous</button>
+        <span class="slide-counter" id="counter">1 / 12</span>
+        <button id="nextBtn" onclick="nextSlide()">Next ▶</button>
+        <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+</header>
+
+<main>
+    <div class="slide-stage" id="stage">
+
+        <!-- Slide 1: Title Slide -->
+        <div class="slide dark-theme active" data-notes="Welcome everyone. Today we are presenting ChronoTrack: a complete, cross-platform browsing activity tracker and productivity analytics suite. ChronoTrack unifies browser tracking via a Manifest V3 Chrome Extension, scalable backend persistence, and now a complete native Java Swing desktop application.">
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+                <span class="category-pill">⚡ ACTIVITY MONITORING SUITE</span>
+                <h1 style="font-size: 56px; font-weight: 800; color: #fff; margin-bottom: 12px;">ChronoTrack</h1>
+                <p style="font-size: 22px; color: var(--text-light-muted); margin-bottom: 40px;">
+                    Smart Cross-Platform Browser Activity Tracker & Analytics Suite
+                </p>
+                <div class="grid-4" style="width: 100%;">
+                    <div class="card card-dark">
+                        <div class="card-title" style="color: var(--cyan);">🌐 Chrome Extension</div>
+                        <p style="font-size: 13px; color: var(--text-light-muted); line-height: 1.4;">Manifest V3 service worker capturing normal & incognito tabs in real-time.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <div class="card-title" style="color: var(--emerald);">🚀 Node.js & MongoDB</div>
+                        <p style="font-size: 13px; color: var(--text-light-muted); line-height: 1.4;">Express REST API backend with secure schema persistence and aggregation.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <div class="card-title" style="color: var(--primary);">☕ Java Swing Client</div>
+                        <p style="font-size: 13px; color: var(--text-light-muted); line-height: 1.4;">Native desktop GUI with analytics, live search, and custom Java2D vector charts.</p>
+                    </div>
+                    <div class="card card-dark">
+                        <div class="card-title" style="color: var(--purple);">⚙️ Embedded Java Server</div>
+                        <p style="font-size: 13px; color: var(--text-light-muted); line-height: 1.4;">Zero-dependency native Java HTTP server on port 5000 with CORS.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide" data-notes="This slide outlines the core problem statement, our solution, and technical value. Traditional history tools are fragmented and fail to address private browsing analysis. ChronoTrack solves this by providing a unified, privacy-first tracking and analytics engine accessible both through browser popups and a dedicated Java desktop app.">
+            <span class="category-pill">OVERVIEW</span>
+            <h1 class="slide-title">Executive Summary & Motivation</h1>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color: var(--amber);">⚠️ The Challenge</div>
+                    <ul class="points">
+                        <li>Modern users spend 6+ hours daily on browsers without tracking actual productivity.</li>
+                        <li>Incognito and private windows create blind spots in traditional browser history.</li>
+                        <li>Most tracking tools are intrusive, cloud-only, or lock users into closed platforms.</li>
+                        <li>Lack of unified local desktop analysis and immediate offline feedback.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">💡 The Solution</div>
+                    <ul class="points">
+                        <li>Lightweight Chrome Extension tracks standard and incognito browsing sessions transparently.</li>
+                        <li>REST API layer standardizes event payloads across web and desktop endpoints.</li>
+                        <li>Rich Java Swing desktop dashboard provides zero-latency offline management.</li>
+                        <li>Complete user data sovereignty with local CSV and JSON export capabilities.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--emerald);">🚀 Key Value</div>
+                    <ul class="points">
+                        <li><strong>Dual-Backend Freedom:</strong> Run seamlessly with Node.js/MongoDB OR 100% pure Java.</li>
+                        <li><strong>Zero External Jar Dependencies:</strong> Java Swing client runs out of the box with standard JDK.</li>
+                        <li><strong>Multi-Platform:</strong> Windows, macOS, and Linux compatibility across all subsystems.</li>
+                        <li><strong>Extensible Architecture:</strong> Clean REST contract for future integrations.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Architecture -->
+        <div class="slide" data-notes="ChronoTrack follows a clean 3-tier architecture. Notice the dual-backend capability in Tier 2: a developer or user can run ChronoTrack using Node.js and MongoDB, or run entirely in Java without installing any databases or runtime dependencies. Both backends adhere to the exact same REST API schema.">
+            <span class="category-pill">ARCHITECTURE</span>
+            <h1 class="slide-title">System Architecture & 3-Tier Design</h1>
+            <div style="background: var(--primary); color: white; padding: 14px 20px; border-radius: 8px; margin-bottom: 20px;">
+                <strong>End-to-End Data Pipeline:</strong> Browser Event ➔ REST API ➔ Database & Desktop GUI
+                <p style="font-size: 13px; opacity: 0.9; margin-top: 4px;">Chrome webNavigation listener emits JSON payload ➔ Handled by Express or Java HttpServer on :5000 ➔ Persisted and visualized.</p>
+            </div>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">Tier 1: Client Layer</div>
+                    <ul class="points">
+                        <li><strong>Chrome Extension (MV3):</strong> Background service worker listening to tab completions; injects OAuth and captures mode.</li>
+                        <li><strong>Desktop Client (Swing):</strong> High-performance native GUI with multi-tab dashboard, real-time polling, and chart rendering.</li>
+                        <li><strong>Web Extension Popup:</strong> HTML5/JS extension popup for instant quick stats and settings toggles.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">Tier 2: Service / API Layer</div>
+                    <ul class="points">
+                        <li><strong>Node.js / Express Server:</strong> Modular server on port 5000 managing Mongoose models, validation, and REST routes.</li>
+                        <li><strong>Embedded Java Server:</strong> Native com.sun.net.httpserver on port 5000 implementing full ChronoTrack REST spec.</li>
+                        <li><strong>CORS & Security Bridge:</strong> Cross-origin headers allowing seamless browser and desktop communication.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--purple);">Tier 3: Persistence Layer</div>
+                    <ul class="points">
+                        <li><strong>MongoDB Database:</strong> Document database storing indexed history entries with timestamps and domain keys.</li>
+                        <li><strong>Local File Storage:</strong> chronotrack_storage.json for zero-dependency standalone Java persistence.</li>
+                        <li><strong>Export Engine:</strong> Standardized CSV & JSON export formats for reporting and data portability.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Extension -->
+        <div class="slide" data-notes="The Chrome extension operates in the background with zero perceptible CPU or memory footprint. It uses Manifest V3 standards, capturing user navigation only on main frames. Notice the clean JSON payload structure: url, title, and browserMode, which are parsed and indexed by the backend.">
+            <span class="category-pill">FRONTEND</span>
+            <h1 class="slide-title">Chrome Extension: Intelligent Browser Tracking</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">Manifest V3 Service Worker Architecture</div>
+                    <ul class="points">
+                        <li><strong>Main Frame Interception:</strong> Listens to <code>chrome.webNavigation.onCommitted</code> for frameId: 0, preventing duplicate tracking from embedded iframes.</li>
+                        <li><strong>Dual Mode Awareness:</strong> Inspects <code>tab.incognito</code> state to tag events as 'normal' or 'incognito'. Incognito split mode guarantees privacy compliance.</li>
+                        <li><strong>Configurable Settings:</strong> User toggles for master tracking, incognito recording, auto-refresh, and desktop notifications via <code>chrome.storage.local</code>.</li>
+                        <li><strong>Non-Blocking Async Dispatch:</strong> Transmits records asynchronously via <code>fetch()</code> to <code>http://127.0.0.1:5000/api/history</code> without page latency.</li>
+                    </ul>
+                </div>
+                <div class="card card-dark">
+                    <div class="card-title" style="color: var(--cyan);">Event Payload Specification</div>
+                    <pre class="code-block">
+POST /api/history HTTP/1.1
+Host: 127.0.0.1:5000
+Content-Type: application/json
+
+{
+  "url": "https://github.com",
+  "title": "GitHub · Platform",
+  "browserMode": "incognito"
+}
+
+// Response: 201 Created
+{
+  "message": "History saved",
+  "data": {
+    "_id": "6735e5d3...",
+    "domain": "github.com",
+    "visitTime": "2026-11-17T..."
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Java Swing -->
+        <div class="slide" data-notes="Here we introduce the brand new Java Swing application added in desktop-swing. It provides a polished, responsive UI that feels right at home on modern desktop OSes. It includes four core views: Dashboard, History Explorer, Analytics, and Server Controls.">
+            <span class="category-pill">DESKTOP CLIENT</span>
+            <h1 class="slide-title">Java & Java Swing: Native Desktop Client</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">📊 Overview Dashboard</div>
+                    <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">Real-time KPI metric counters for Total Visits, Normal Mode, Incognito Mode, and Unique Domains with automated 5-second background polling.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">🔍 History Explorer</div>
+                    <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">Searchable, sortable JTable with live keystroke filtering across URLs, titles, and domains, plus browsing mode pill badge renderers.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--purple);">📈 Native Visual Analytics</div>
+                    <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">Custom Java2D vector graphics: Donut Chart for privacy mode distribution and Horizontal Bar Chart for top 10 visited domains.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--emerald);">⚙️ Server & Connectivity Hub</div>
+                    <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">Embedded control panel to test remote API connections, toggle the built-in Java server, or generate sample test data.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Design System -->
+        <div class="slide" data-notes="Many legacy Swing applications look outdated, but ChronoTrack uses modern design patterns: Slate color palettes, pill badges, rounded card borders, and smooth interaction states. This demonstrates how standard Java Swing can look as sleek and clean as contemporary web applications.">
+            <span class="category-pill">SWING UI</span>
+            <h1 class="slide-title">Desktop UI & Modern Swing Design System</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">Modern Look & Feel Engineering</div>
+                    <ul class="points">
+                        <li><strong>Native System Integration:</strong> Utilizes <code>UIManager.getSystemLookAndFeelClassName()</code> with antialiased font rendering (<code>KEY_TEXT_ANTIALIASING</code>).</li>
+                        <li><strong>Polished Component Styling:</strong> <code>ModernTheme.java</code> defines unified Slate color palettes, rounded borders, and smooth button hover states.</li>
+                        <li><strong>Custom TableCellRenderer:</strong> <code>BadgeRenderer</code> creates color-coded pill badges: <span class="pill-normal">● Normal</span> and <span class="pill-incog">🕶️ Incognito</span>.</li>
+                        <li><strong>Zebra Striped ModernTable:</strong> Alternating row backgrounds, 38px touch-friendly row heights, and custom header renderers.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">Interactive UI Elements Breakdown</div>
+                    <ul class="points">
+                        <li><strong>Header Status Pill:</strong> Live indicator displaying <code>[● Connected to Backend]</code>, <code>[● Java Server Active]</code>, or <code>[○ Backend Offline]</code>.</li>
+                        <li><strong>Metric Cards Grid:</strong> Prominent stat widgets displaying large 26pt bold counters and dynamic percentage shares.</li>
+                        <li><strong>Real-Time Filter Bar:</strong> Instant search input with <code>DocumentListener</code> triggering filter updates on each keystroke.</li>
+                        <li><strong>Action Dialogs:</strong> Modal dialogs for logging manual visits with URL validation and choosing export formats.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Analytics -->
+        <div class="slide" data-notes="A key technical achievement here is the custom Graphics2D chart engine in ChartsPanel.java. Instead of bloating the project with third-party charting libraries, we engineered vector-based Donut and Horizontal Bar charts from scratch using Java2D. This makes the project completely self-contained and ultra-fast.">
+            <span class="category-pill">ANALYTICS</span>
+            <h1 class="slide-title">Native Java2D Charts & Analytics Engine</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title" style="color: var(--purple);">🍩 Mode Distribution Donut Chart</div>
+                    <ul class="points">
+                        <li><strong>Mathematical Arc Computation:</strong> Computes precise degree angles: <code>(normalCount / total) * 360</code> with antialiased <code>Arc2D</code> arcs.</li>
+                        <li><strong>Visual Privacy Breakdown:</strong> Emerald green segment displays Normal visits; vibrant purple segment displays Incognito visits.</li>
+                        <li><strong>Central Summary Metric:</strong> Renders total visits count right in the center ring with font metrics alignment.</li>
+                        <li><strong>Responsive Auto-Scaling:</strong> Dynamically resizes with window geometry while maintaining circular proportions.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">📊 Top Domains Horizontal Bar Chart</div>
+                    <ul class="points">
+                        <li><strong>Domain Aggregation:</strong> Extracts root domain keys and sorts by frequency descending (e.g. <code>github.com</code>, <code>stackoverflow.com</code>).</li>
+                        <li><strong>Proportional Fill Tracks:</strong> Draws soft gray background tracks and fills indigo rounded bars proportional to the top visit count.</li>
+                        <li><strong>Clean Typography:</strong> Ellipsizes long domains to maintain crisp vertical alignment across any dataset size.</li>
+                        <li><strong>Zero Third-Party Libraries:</strong> Rendered 100% natively via <code>Graphics2D</code> without JFreeChart or heavy dependencies.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Embedded Java Server -->
+        <div class="slide" data-notes="The embedded server is an architectural highlight. If a professor, evaluator, or user doesn't have Node.js or MongoDB installed, they can run ChronoTrack purely in Java with a single command. The Chrome Extension connects to the Java server just as easily as it connects to Express.">
+            <span class="category-pill">JAVA BACKEND</span>
+            <h1 class="slide-title">Embedded Java Server: Pure Java Stack</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title" style="color: var(--emerald);">Lightweight Native HTTP Server on Port 5000</div>
+                    <ul class="points">
+                        <li><strong>com.sun.net.httpserver.HttpServer:</strong> Built directly on the standard JDK HTTP server module. No Tomcat, Jetty, or Spring Boot required.</li>
+                        <li><strong>Complete REST API Parity:</strong> Handles <code>GET /api/history</code>, <code>POST /api/history</code>, and <code>DELETE /api/history</code> identically to Node.js.</li>
+                        <li><strong>CORS Compliance:</strong> Configured with <code>Access-Control-Allow-Origin: *</code> to accept background browser activity from Chrome Extension directly.</li>
+                        <li><strong>Real-Time Event Pub/Sub:</strong> Emits notifications when new visits arrive, updating the Swing UI instantaneously.</li>
+                        <li><strong>Local Persistence:</strong> Automatically loads and flushes history to <code>chronotrack_storage.json</code> on disk across restarts.</li>
+                    </ul>
+                </div>
+                <div class="card card-dark">
+                    <div class="card-title" style="color: var(--cyan);">Dual-Backend Flexibility</div>
+                    <ul class="points">
+                        <li><strong style="color: var(--amber);">Mode A: Full-Stack Mode</strong><br>Runs Node.js + Express + MongoDB. Best for scalable multi-user deployments and cloud sync.</li>
+                        <li><strong style="color: var(--emerald);">Mode B: Pure Java Standalone</strong><br>Runs Embedded Java Server inside Swing. Zero installation needed: no Node, no npm, no MongoDB.</li>
+                        <li><strong style="color: #fff;">Seamless Compatibility</strong><br>The Chrome Extension talks to port 5000 regardless of which backend is active!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Tech Stack -->
+        <div class="slide" data-notes="This slide summarizes the cross-platform tech stack. Each technology was selected for specific strengths: Manifest V3 for seamless web capture, Express and MongoDB for schema flexibility, and Java SE + Swing for robust, zero-dependency desktop performance.">
+            <span class="category-pill">TECH STACK</span>
+            <h1 class="slide-title">Full Technology Stack Comparison</h1>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">Browser Extension</div>
+                    <ul class="points">
+                        <li><strong>Language:</strong> JavaScript (ES6+)</li>
+                        <li><strong>Platform:</strong> Chrome Extensions MV3</li>
+                        <li><strong>APIs:</strong> webNavigation, storage, tabs</li>
+                        <li><strong>Auth:</strong> Google OAuth 2.0</li>
+                        <li><strong>UI:</strong> HTML5, CSS3, Responsive Grid</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--emerald);">Node.js Backend</div>
+                    <ul class="points">
+                        <li><strong>Runtime:</strong> Node.js (v18+)</li>
+                        <li><strong>Framework:</strong> Express.js 5</li>
+                        <li><strong>Database:</strong> MongoDB / Mongoose 9</li>
+                        <li><strong>Security:</strong> CORS, dotenv, jwt</li>
+                        <li><strong>Protocol:</strong> RESTful JSON over HTTP</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">Java Desktop Suite</div>
+                    <ul class="points">
+                        <li><strong>Language:</strong> Java 17 / 21 / 26</li>
+                        <li><strong>GUI Toolkit:</strong> Java Swing (javax.swing)</li>
+                        <li><strong>Graphics:</strong> Java2D (Graphics2D)</li>
+                        <li><strong>HTTP Client:</strong> java.net.http.HttpClient</li>
+                        <li><strong>Embedded Srv:</strong> com.sun.net.httpserver</li>
+                        <li><strong>Build Tool:</strong> Maven (pom.xml) + Scripts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Setup Guide -->
+        <div class="slide" data-notes="Getting started with ChronoTrack is effortless. The user can launch the Java Swing app in seconds using run.bat, load the extension in Chrome via developer mode, and start tracking immediately. No complex build tools are required.">
+            <span class="category-pill">SETUP & DEMO</span>
+            <h1 class="slide-title">Execution & Setup Guide</h1>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">☕ Step 1: Run Java Swing App</div>
+                    <ul class="points">
+                        <li>Navigate to desktop-swing folder:</li>
+                        <li><code>cd desktop-swing</code></li>
+                        <li>Run with script: <code>run.bat</code></li>
+                        <li>Or with Java server: <code>run.bat --server --seed</code></li>
+                        <li>Or Maven: <code>mvn compile exec:java</code></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">🧩 Step 2: Load Extension</div>
+                    <ul class="points">
+                        <li>Open Chrome: <code>chrome://extensions/</code></li>
+                        <li>Enable <strong>Developer mode</strong> toggle.</li>
+                        <li>Click <strong>Load unpacked</strong>.</li>
+                        <li>Select <code>d:\ChronoTrack\extension</code>.</li>
+                        <li>Extension is active and tracking visits!</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--emerald);">🌐 Step 3: (Optional) Node Server</div>
+                    <ul class="points">
+                        <li>If choosing MongoDB mode:</li>
+                        <li><code>cd backend</code></li>
+                        <li><code>npm install</code></li>
+                        <li><code>npm start</code> (Runs Express on port 5000)</li>
+                        <li>Desktop app connects automatically!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Roadmap -->
+        <div class="slide" data-notes="Looking forward, the architecture is ready for future enhancements: multi-browser support for Firefox and Safari, AI productivity scoring to categorize sites automatically, and enterprise team analytics.">
+            <span class="category-pill">FUTURE OUTLOOK</span>
+            <h1 class="slide-title">Roadmap & Future Enhancements</h1>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color: var(--cyan);">🌐 Phase 1: Multi-Browser</div>
+                    <ul class="points">
+                        <li>Port extension manifest to Firefox (WebExtensions) and Safari.</li>
+                        <li>Unified multi-browser sync on the same workstation.</li>
+                        <li>Active tab duration tracking (time spent per page).</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--primary);">🧠 Phase 2: AI Productivity</div>
+                    <ul class="points">
+                        <li>Automated domain categorization (Productivity, Social, Learning).</li>
+                        <li>Local LLM integration for daily browsing summarization.</li>
+                        <li>Custom goal tracking and distraction alert thresholds.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color: var(--purple);">🏢 Phase 3: Team Analytics</div>
+                    <ul class="points">
+                        <li>Encrypted team history aggregation for collaborative teams.</li>
+                        <li>Role-based access control and organizational dashboards.</li>
+                        <li>Automated PDF export reports and executive audit summaries.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusion -->
+        <div class="slide dark-theme" data-notes="Thank you for your time. ChronoTrack demonstrates a complete, cohesive full-stack solution bridging browser extensions, REST services, and native desktop Java Swing applications. We are now open for live questions and demonstrations.">
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <h1 style="font-size: 52px; font-weight: 800; color: #fff; margin-bottom: 14px;">Thank You!</h1>
+                <p style="font-size: 22px; color: var(--cyan); margin-bottom: 12px;">ChronoTrack: Empowering Smart, Private, and Insightful Browsing Analytics</p>
+                <p style="font-size: 15px; color: var(--text-light-muted); margin-bottom: 40px;">Open Source · Cross-Platform · Dual-Backend Architecture</p>
+                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 12px 30px; border-radius: 30px; font-size: 18px; font-weight: 700;">
+                    Questions & Demonstration
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div class="speaker-notes-drawer" id="notesDrawer">
+    <strong>Speaker Notes:</strong> <span id="notesText"></span>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slides.length) index = slides.length - 1;
+        
+        slides.forEach((s, idx) => {
+            s.classList.toggle('active', idx === index);
+        });
+        
+        currentIndex = index;
+        document.getElementById('counter').innerText = `${currentIndex + 1} / ${slides.length}`;
+        
+        const notes = slides[currentIndex].getAttribute('data-notes') || 'No speaker notes for this slide.';
+        document.getElementById('notesText').innerText = notes;
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+
+    function toggleFullscreen() {
+        const stage = document.getElementById('stage');
+        if (!document.fullscreenElement) {
+            stage.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            prevSlide();
+        } else if (e.key === 'f' || e.key === 'F') {
+            toggleFullscreen();
+        }
+    });
+
+    // Initial load
+    showSlide(0);
+</script>
+</body>
+</html>

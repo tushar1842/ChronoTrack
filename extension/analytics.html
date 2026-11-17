@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoTrack - Website Analytics</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #090e1a;
+            color: #e5e7eb;
+            font-family: Inter, sans-serif;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 26px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #172b49;
+            border: 1px solid #334b70;
+            color: #38bdf8;
+            padding: 11px 15px;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background: #203c61;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+            margin-bottom: 25px;
+        }
+
+        .card, .panel {
+            background: #111c30;
+            border: 1px solid #26344c;
+            border-radius: 13px;
+            padding: 22px;
+        }
+
+        .card p {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+            margin-top: 12px;
+        }
+
+        .card small {
+            display: block;
+            color: #38bdf8;
+            font-size: 10px;
+            margin-top: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .panel h3 {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 280px;
+        }
+
+        .donut-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+        }
+
+        #modeChart {
+            width: 220px;
+            height: 220px;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .cyan {
+            background: #22d3ee;
+        }
+
+        .purple {
+            background: #c084fc;
+        }
+
+        .site-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #253247;
+            font-size: 12px;
+        }
+
+        .site-item:last-child {
+            border-bottom: none;
+        }
+
+        .site-name {
+            overflow-wrap: anywhere;
+        }
+
+        .site-count {
+            color: #38bdf8;
+            white-space: nowrap;
+        }
+
+        .empty {
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .status {
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 9px;
+            background: #0a1425;
+            border: 1px solid #26344c;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        @media(max-width: 950px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 550px) {
+            body {
+                padding: 16px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <div>
+            <h1>Website Analytics</h1>
+            <p class="subtitle">Understand your browsing patterns and website activity.</p>
+        </div>
+
+        <div class="actions">
+            <button id="dashboardBtn">← Dashboard</button>
+            <button id="historyBtn">Browsing History</button>
+            <button id="refreshBtn">↻ Refresh</button>
+        </div>
+    </header>
+
+    <section class="stats">
+
+        <div class="card">
+            <p>Total Page Visits</p>
+            <h2 id="totalVisits">0</h2>
+            <small>Last 7 days</small>
+        </div>
+
+        <div class="card">
+            <p>Unique Websites</p>
+            <h2 id="uniqueSites">0</h2>
+            <small>Distinct domains</small>
+        </div>
+
+        <div class="card">
+            <p>Normal Visits</p>
+            <h2 id="normalVisits">0</h2>
+            <small>Regular browsing</small>
+        </div>
+
+        <div class="card">
+            <p>Incognito Visits</p>
+            <h2 id="incognitoVisits">0</h2>
+            <small>Incognito browsing</small>
+        </div>
+
+    </section>
+
+    <section class="grid">
+
+        <div class="panel">
+            <h3>Daily Browsing Activity</h3>
+            <canvas id="activityChart"></canvas>
+        </div>
+
+        <div class="panel">
+            <h3>Browsing Mode Distribution</h3>
+
+            <div class="donut-wrapper">
+                <canvas id="modeChart"></canvas>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="dot cyan"></span>
+                    Normal Browsing
+                    <strong id="normalPercent">0%</strong>
+                </div>
+
+                <div class="legend-item">
+                    <span class="dot purple"></span>
+                    Incognito Browsing
+                    <strong id="incognitoPercent">0%</strong>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="panel">
+
+        <h3>Top 10 Websites · Last 7 Days</h3>
+
+        <div id="topSites">
+            <div class="empty">Loading website statistics...</div>
+        </div>
+
+        <p class="note">
+            ChronoTrack currently records page visits, not active time spent
+            on a website. These statistics represent recorded visits and
+            should not be interpreted as screen time.
+        </p>
+
+        <p class="status" id="status">Connecting to backend...</p>
+
+    </section>
+
+</div>
+
+<script src="analytics.js"></script>
+
+</body>
+</html>

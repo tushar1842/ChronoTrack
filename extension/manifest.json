@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ChronoTrack",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Smart browser activity tracking and management with secure Google authentication.",
 
   "permissions": [
@@ -9,7 +9,8 @@
     "history",
     "webNavigation",
     "identity",
-    "storage"
+    "storage",
+    "notifications"
   ],
 
   "host_permissions": [

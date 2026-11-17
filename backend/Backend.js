@@ -67,6 +67,33 @@ app.get("/api/history", async (req, res) => {
     }
 });
 
+// Delete specific browsing history entry
+app.delete("/api/history/:id", async (req, res) => {
+    try {
+        const deleted = await History.findByIdAndDelete(req.params.id);
+        if (!deleted) {
+            return res.status(404).json({ message: "Record not found" });
+        }
+        res.json({ message: "Record deleted", data: deleted });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+});
+
+// Clear all browsing history
+app.delete("/api/history", async (req, res) => {
+    try {
+        await History.deleteMany({});
+        res.json({ message: "All history cleared" });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+});
+
 app.listen(5000, "127.0.0.1", () => {
     console.log("ChronoTrack server running on port 5000");
 });
